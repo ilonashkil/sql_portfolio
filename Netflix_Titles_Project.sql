@@ -7,6 +7,7 @@ HAVING COUNT(*) = (SELECT MAX(content_count)
                          FROM netflix_titles
                          GROUP BY country) AS counts);
 
+
 -- What is the most common rating for Netflix content?
 SELECT rating, COUNT(*)
 FROM netflix_titles
@@ -15,6 +16,7 @@ HAVING COUNT(*) = (SELECT MAX(rating_count)
                    FROM (SELECT COUNT(*) AS rating_count
                          FROM netflix_titles
                          GROUP BY rating) AS counts)
+
 
 -- How has the number of Netflix titles added per year changed over time?
 ALTER TABLE netflix_titles
@@ -26,6 +28,7 @@ WHERE date_added IS NOT NULL
 GROUP BY years
 ORDER BY years;
 
+
 -- Who are the top 10 most common directors for Netflix Movies?
 SELECT director, COUNT(*) AS num_content
 FROM netflix_titles
@@ -34,6 +37,7 @@ WHERE director IS NOT NULL
 GROUP BY director
 ORDER BY num_content DESC
 LIMIT 10;
+
 
 -- What are the most common genres for Netflix content - Movies vs TV Shows?
 SELECT type, genre, num_content
@@ -54,6 +58,7 @@ FROM (SELECT type, UNNEST(STRING_TO_ARRAY(listed_in, ', ')) AS genre, COUNT(*) A
               ON subquery.type = max_counts.max_type AND subquery.num_content = max_counts.max_num_content
 ORDER BY type, num_content DESC;
 
+
 -- Top 3 genres per type
 -- This query first calculates the count of each genre for each type, as before, but then ranks the genres for each type 
 -- using the ROW_NUMBER() function. Finally, it selects only the top 3 genres for each type by filtering on genre_rank <= 3.
@@ -69,11 +74,11 @@ FROM (SELECT type,
 WHERE genre_rank <= 3
 ORDER BY type, num_content DESC;
 
+
 -- What is the average duration of a Netflix movie versus a TV show?
 -- This SQL query adds two new columns to the table netflix_titles to store the duration of movies in minutes and
 -- the number of seasons for TV shows as integers. It uses regular expressions to extract the numeric values from
 -- the `duration` column by removing any non-numeric characters, and then casts the resulting strings to integers.
-
 ALTER TABLE netflix_titles
     ADD COLUMN num_seasons      INTEGER,
     ADD COLUMN duration_minutes INTEGER;
