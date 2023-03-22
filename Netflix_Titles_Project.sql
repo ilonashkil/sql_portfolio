@@ -100,4 +100,10 @@ FROM netflix_titles
 GROUP BY type;
 
 
+-- What is the trend in the number of movies versus TV shows added to Netflix over time?
+SELECT type, EXTRACT(YEAR FROM date_added) AS years, COUNT(*)
+FROM netflix_titles
+WHERE date_added IS NOT NULL
+GROUP BY type, years
+ORDER BY type, years;
 --- TO BE CONTINUED --- 
