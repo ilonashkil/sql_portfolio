@@ -67,5 +67,30 @@ FROM (SELECT type,
 WHERE genre_rank <= 3
 ORDER BY type, num_content DESC;
 
+-- What is the average duration of a Netflix movie versus a TV show?
+-- This SQL query adds two new columns to the table netflix_titles to store the duration of movies in minutes and
+-- the number of seasons for TV shows as integers. It uses regular expressions to extract the numeric values from
+-- the `duration` column by removing any non-numeric characters, and then casts the resulting strings to integers.
+
+ALTER TABLE netflix_titles
+    ADD COLUMN num_seasons      INTEGER,
+    ADD COLUMN duration_minutes INTEGER;
+
+UPDATE netflix_titles
+SET num_seasons      = CASE
+                           WHEN type = 'TV Show' THEN CAST(REGEXP_REPLACE(duration, '[^0-9]+', '', 'g') AS INTEGER)
+                           ELSE NULL
+    END,
+    duration_minutes = CASE
+                           WHEN type = 'Movie' THEN CAST(REGEXP_REPLACE(duration, '[^0-9]+', '', 'g') AS INTEGER)
+                           ELSE NULL
+        END;
+
+SELECT type,
+       CAST(AVG(num_seasons) AS numeric(4, 2))      AS avg_seasons,
+       CAST(AVG(duration_minutes) AS numeric(4, 2)) AS avg_minutes
+FROM netflix_titles
+GROUP BY type;
+
 
 --- TO BE CONTINUED --- 
