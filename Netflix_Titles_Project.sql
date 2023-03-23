@@ -136,4 +136,13 @@ GROUP BY gender_group
 ORDER BY count ASC;
 
 
---- TO BE CONTINUED --- 
+-- What are the most popular countries for producing content in a specific genre, and how has this changed over time?
+SELECT unnest(string_to_array(country, ', ')) as country_1, release_year, COUNT(*) as count
+from (
+  SELECT show_id, country, release_year, unnest(string_to_array(listed_in, ', ')) AS genre
+  FROM netflix_titles
+) AS t
+WHERE genre = 'Comedies'
+and country is not null
+GROUP BY country_1, release_year
+ORDER BY country_1 DESC, release_year DESC;
