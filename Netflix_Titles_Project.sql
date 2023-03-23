@@ -106,4 +106,32 @@ FROM netflix_titles
 WHERE date_added IS NOT NULL
 GROUP BY type, years
 ORDER BY type, years;
+
+
+-- How many Netflix titles have a title or description that mentions a specific keyword?
+-- Keyword groups
+SELECT CASE
+           WHEN description LIKE '%coming of age%' OR description LIKE '%crime%' OR description LIKE '%family dynamics%'
+               THEN 'Theme keywords'
+           WHEN description LIKE '%New York City%' OR description LIKE '%outer space%' OR description LIKE '%medieval Europe%'
+               THEN 'Setting keywords'
+            WHEN description LIKE '%inequality%' OR description LIKE '%climate change%' OR description LIKE '%addiction%'
+               THEN 'Social issue keywords'
+           ELSE 'other'
+           END  AS keyword_groups,
+       COUNT(*) AS count
+FROM netflix_titles
+GROUP BY keyword_groups;
+
+-- boys vs men vs girls vs women
+SELECT CASE
+           WHEN description ~* '\y(girls?|woman|women)\y' OR title ~* '\y(girls?|woman|women)\y' THEN 'girl/woman'
+           WHEN description ~* '\y(boys?|man|men)\y' OR title ~* '\y(boys?|man|men)\y' THEN 'boy/man'
+           ELSE 'other'
+           END  AS gender_group,
+       COUNT(*) AS count
+FROM netflix_titles
+GROUP BY gender_group;
+
+
 --- TO BE CONTINUED --- 
