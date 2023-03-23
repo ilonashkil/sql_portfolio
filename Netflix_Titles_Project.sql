@@ -121,7 +121,8 @@ SELECT CASE
            END  AS keyword_groups,
        COUNT(*) AS count
 FROM netflix_titles
-GROUP BY keyword_groups;
+GROUP BY keyword_groups
+ORDER BY count ASC;
 
 -- boys vs men vs girls vs women
 SELECT CASE
@@ -131,7 +132,8 @@ SELECT CASE
            END  AS gender_group,
        COUNT(*) AS count
 FROM netflix_titles
-GROUP BY gender_group;
+GROUP BY gender_group
+ORDER BY count ASC;
 
 
 --- TO BE CONTINUED --- 
