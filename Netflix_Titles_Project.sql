@@ -1,11 +1,11 @@
 -- Which country produces the most content for Netflix?
-SELECT country, COUNT(*)
+SELECT UNNEST(STRING_TO_ARRAY(country, ', ')) AS country_1, COUNT(*)
 FROM netflix_titles
-GROUP BY country
+GROUP BY country_1
 HAVING COUNT(*) = (SELECT MAX(content_count)
-                   FROM (SELECT COUNT(*) AS content_count
+                   FROM (SELECT UNNEST(STRING_TO_ARRAY(country, ', ')) AS country_1, COUNT(*) AS content_count
                          FROM netflix_titles
-                         GROUP BY country) AS counts);
+                         GROUP BY country_1) AS counts);
 
 
 -- What is the most common rating for Netflix content?
@@ -137,12 +137,10 @@ ORDER BY count ASC;
 
 
 -- What are the most popular countries for producing content in a specific genre, and how has this changed over time?
-SELECT unnest(string_to_array(country, ', ')) as country_1, release_year, COUNT(*) as count
-from (
-  SELECT show_id, country, release_year, unnest(string_to_array(listed_in, ', ')) AS genre
-  FROM netflix_titles
-) AS t
+SELECT UNNEST(STRING_TO_ARRAY(country, ', ')) AS country_1, release_year, COUNT(*) AS count
+FROM (SELECT show_id, country, release_year, UNNEST(STRING_TO_ARRAY(listed_in, ', ')) AS genre
+      FROM netflix_titles) AS t
 WHERE genre = 'Comedies'
-and country is not null
+  AND country IS NOT NULL
 GROUP BY country_1, release_year
 ORDER BY country_1 DESC, release_year DESC;
