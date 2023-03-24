@@ -10,7 +10,8 @@ This portfolio showcases my experience working with SQL and related tools to sol
 
 - **Khan Academy Exercises:** These exercises are basic, but completing them helped me remove some rust and sharpen my SQL skills. I enjoyed working on these exercises and found them to be a helpful refresher.
 - **Murder Mystery Riddle:** Although I completed this riddle a while ago, I decided to include it in my portfolio because it was a fun and challenging exercise that allowed me to practice my SQL skills in a unique and creative way.
-- **Netflix Data Analysis:** This project is currently a work-in-progress, and it involves exploring the data of Netflix movies and TV shows from various aspects. I'm using SQL to manipulate and analyze the data and **Tableau** to visualize and present the insights. I'm excited to share the results once the project is complete.
+- **Netflix Data Analysis:** This project involves exploring the data of Netflix movies and TV shows from various aspects. I used SQL to manipulate and analyze the data, and you can find the SQL file with the queries and results in the [link](https://github.com/ilonashkil/sql_portfolio/blob/main/Netflix_Titles_Project.sql).
+- **Spotify Streams Data Analysis:** This project involves analyzing data about the streams of songs on Spotify, including the number of streams, release date, and various features of the songs. The focus is more on the songs themselves rather than user behavior. I am currently working on this project and will continue to update my portfolio as I make progress [link](https://github.com/ilonashkil/sql_portfolio/blob/main/Spotify_Streams_Project.sql).
 
 ## Skills and Tools
 
