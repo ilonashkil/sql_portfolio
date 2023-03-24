@@ -13,4 +13,4 @@ To run this project, you will need:
 - SQLite (version 3 or higher) installed on your computer
 - A text editor or SQLite client for running SQL queries
 
-##[Click here to access the riddle.](https://mystery.knightlab.com/)
+[Click here to access the riddle.](https://mystery.knightlab.com/)
