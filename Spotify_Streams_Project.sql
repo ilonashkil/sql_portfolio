@@ -53,3 +53,34 @@ FROM (
 ) ranked_artists
 WHERE artist_rank <= 5
 ORDER BY avg_streams_millions DESC;
+
+
+-- Which song had the highest popularity score by release year?
+-- This query calculates the popularity score for each song based on a weighted combination of streams, valence, 
+-- energy, and danceability. It then uses ROW_NUMBER() to rank the songs within each year based on their popularity 
+-- score, and selects only the top-ranked song for each year.
+WITH song_popularity AS (SELECT song,
+                                artist,
+                                release_date,
+                                streams_billions,
+                                (0.2 * s.streams_billions + 0.3 * f.valence + 0.1 * f.energy +
+                                 0.1 * f.danceability)          AS popularity_score,
+                                EXTRACT(YEAR FROM release_date) AS year
+                         FROM spot_streams s
+                                  JOIN spot_features f ON s.song = f.name),
+     ranked_songs AS (SELECT song,
+                             artist,
+                             release_date,
+                             streams_billions,
+                             popularity_score,
+                             year,
+                             ROW_NUMBER() OVER (PARTITION BY year ORDER BY popularity_score DESC) AS rank
+                      FROM song_popularity)
+SELECT song,
+       artist,
+       streams_billions,
+       popularity_score,
+       year
+FROM ranked_songs
+WHERE rank = 1
+ORDER BY year DESC;
