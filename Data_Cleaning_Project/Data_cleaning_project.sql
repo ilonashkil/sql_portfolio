@@ -38,4 +38,27 @@ ALTER TABLE nashville_housing
 UPDATE nashville_housing
 set owner_street = SPLIT_PART(REPLACE("OwnerAddress", ',', '.'), '.', 1),
     owner_city = SPLIT_PART(REPLACE("OwnerAddress", ',', '.'), '.', 2),
-    owner_state = SPLIT_PART(REPLACE("OwnerAddress", ',', '.'), '.', 3)
+    owner_state = SPLIT_PART(REPLACE("OwnerAddress", ',', '.'), '.', 3);
+
+
+    -- Remove Duplicates
+WITH row_num_cte AS (SELECT *,
+                            ROW_NUMBER() OVER (
+                                PARTITION BY "ParcelID", "PropertyAddress", "SalePrice", "SaleDate", "LegalReference"
+                                ORDER BY "UniqueID"
+                                ) row_number
+                     FROM nashville_housing)
+
+DELETE
+FROM nashville_housing
+WHERE ("UniqueID", "ParcelID", "PropertyAddress", "SalePrice", "SaleDate", "LegalReference") IN
+      (SELECT "UniqueID", "ParcelID", "PropertyAddress", "SalePrice", "SaleDate", "LegalReference"
+       FROM row_num_cte
+       WHERE row_number > 1);
+
+
+-- Delete Unused Columns
+ALTER TABLE nashville_housing
+    DROP COLUMN "OwnerAddress",
+    DROP COLUMN "PropertyAddress",
+    DROP COLUMN "TaxDistrict"
