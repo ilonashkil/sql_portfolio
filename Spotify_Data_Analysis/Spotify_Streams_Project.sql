@@ -86,4 +86,17 @@ WHERE rank = 1
 ORDER BY year DESC;
 
 
+-- Which songs with a danceability greater than 0.7 and a liveness greater than 0.5 have been streamed 
+-- more than 500 million times?
+SELECT s.artist, s.song, s.release_date, f.danceability, f.liveness, s.streams_billions
+FROM spot_streams s
+         JOIN spot_features f
+              ON s.song = f.name
+WHERE f.danceability >= 0.7
+  AND f.liveness >= 0.5
+  AND s.streams_billions >= 0.5
+ORDER BY s.streams_billions DESC;
+
+
+
 --- TO BE CONTINUED --- 
