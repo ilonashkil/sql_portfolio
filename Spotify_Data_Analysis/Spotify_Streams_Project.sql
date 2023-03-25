@@ -98,9 +98,8 @@ WHERE f.danceability >= 0.7
 ORDER BY s.streams_billions DESC;
 
 
-
 -- Basic stats: 
--- 1) Which song is longest and which is the shortest?
+--- 1) Which song is longest and which is the shortest?
 SELECT s.artist, f.name, f.duration
 FROM spot_features f
          JOIN spot_streams s
@@ -110,14 +109,14 @@ WHERE f.duration =
    OR f.duration =
       (SELECT MIN(duration) FROM spot_features);
 
--- 2) What song with a duration that equals to the average?
+--- 2) What song with a duration that equals to the average?
 SELECT s.artist, f.name, f.duration
 FROM spot_features f
          JOIN spot_streams s
               ON s.song = f.name
 WHERE f.duration = (SELECT TRUNC(AVG(duration), 2) FROM spot_features);
 
--- 3) How many songs are longer than the average and how many are shorter?
+--- 3) How many songs are longer than the average and how many are shorter?
 SELECT COUNT(*) AS count,
        CASE
            WHEN duration < (SELECT TRUNC(AVG(duration), 2) FROM spot_features) THEN 'Below average'
@@ -127,5 +126,3 @@ SELECT COUNT(*) AS count,
 FROM spot_features
 GROUP BY duration_groups;
     
-
---- TO BE CONTINUED --- 
