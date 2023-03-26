@@ -1,6 +1,6 @@
 # Nashville Housing Data Cleaning Project
 
-This project involves cleaning and standardizing a dataset of Nashville housing sales data. The dataset contains information on housing sales from 2013 to 2018 and is provided in CSV format.
+This project involves cleaning and standardizing a dataset of Nashville housing sales data. The dataset contains information on housing sales from 2013 to 2018 and is provided in CSV format. The full dataset can be found [here](https://github.com/AlexTheAnalyst/PortfolioProjects/blob/main/Nashville%20Housing%20Data%20for%20Data%20Cleaning.xlsx).
 
 The goal of this project is to perform various data cleaning tasks on the dataset to ensure data consistency, standardize date formats, populate missing data, and remove duplicates.
 
