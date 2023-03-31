@@ -144,3 +144,17 @@ WHERE genre = 'Comedies'
   AND country IS NOT NULL
 GROUP BY country_1, release_year
 ORDER BY country_1 DESC, release_year DESC;
+
+SELECT EXTRACT(YEAR FROM start_time) AS year, content_type, SUM(duration), SUM(duration_hours)
+FROM viewing_activity
+WHERE profile_name = 'ilona'
+GROUP BY year, content_type
+ORDER BY content_type, year;
+
+ALTER TABLE viewing_activity
+    ADD COLUMN duration_hours NUMERIC;
+
+UPDATE viewing_activity
+SET duration_hours = (EXTRACT(HOUR FROM duration) * 3600
+    + EXTRACT(MINUTE FROM duration) * 60
+    + EXTRACT(SECOND FROM duration)) / 3600 * 1.0;
