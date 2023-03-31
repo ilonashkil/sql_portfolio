@@ -31,3 +31,34 @@ WHERE duration IS NOT NULL;
 --- converting the start time from text to time stamp
 UPDATE viewing_activity
 SET start_time = TO_TIMESTAMP(start_time, 'DD/MM/YYYY HH24:MI');
+
+--- what is the most watched tv-show?
+SELECT tv_show_name, COUNT(*)
+FROM viewing_activity
+GROUP BY tv_show_name
+HAVING COUNT(*) = (SELECT MAX(tv_show_name_count)
+                   FROM (SELECT COUNT(*) AS tv_show_name_count
+                         FROM viewing_activity
+                         GROUP BY tv_show_name) AS counts);
+
+--- by view count and profile
+SELECT profile_name, tv_show_name, view_count
+FROM (
+  SELECT profile_name, tv_show_name, COUNT(*) AS view_count,
+         ROW_NUMBER() OVER (PARTITION BY profile_name ORDER BY COUNT(*) DESC) AS rn
+  FROM viewing_activity
+  WHERE tv_show_name IS NOT NULL
+  GROUP BY profile_name, tv_show_name
+) subquery
+WHERE rn = 1;
+
+--- by duration time and profile
+SELECT profile_name, tv_show_name, view_duration
+FROM (
+  SELECT profile_name, tv_show_name, SUM(duration::interval) AS view_duration,
+         ROW_NUMBER() OVER (PARTITION BY profile_name ORDER BY SUM(duration::interval) DESC) AS rn
+  FROM viewing_activity
+  WHERE tv_show_name IS NOT NULL
+  GROUP BY profile_name, tv_show_name
+) subquery
+WHERE rn = 1;
