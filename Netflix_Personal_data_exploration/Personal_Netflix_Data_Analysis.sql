@@ -61,3 +61,25 @@ FROM (SELECT profile_name,
       WHERE tv_show_name IS NOT NULL
       GROUP BY profile_name, tv_show_name) subquery
 WHERE rn = 1;
+
+--- creating a column for content title for joining the general Netflix Data
+ALTER TABLE viewing_activity
+    ADD COLUMN content_title text;
+
+UPDATE viewing_activity
+SET content_title = CASE
+                        WHEN tv_show_name IS NULL THEN title
+                        ELSE tv_show_name
+    END;
+
+--- joining the two netflix tables and comparing the actual movie duration to the watch duration
+SELECT v.content_title,
+       n.description,
+       CAST(v.duration_hours AS numeric(4, 2)),
+       CAST(v.duration_hours * 60 AS numeric(5, 2)) AS watch_duration_minutes,
+       n.duration_minutes
+FROM viewing_activity v
+         JOIN netflix_titles n
+              ON v.content_title = n.title
+WHERE v.content_type = 'Movie'
+ORDER BY v.duration_hours DESC
